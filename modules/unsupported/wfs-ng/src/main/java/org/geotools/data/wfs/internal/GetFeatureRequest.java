@@ -40,6 +40,8 @@ public class GetFeatureRequest extends WFSRequest {
 
     private Integer maxFeatures;
 
+    private Integer startIndex;
+    
     private ResultType resultType;
 
     private SortBy[] sortBy;
@@ -88,6 +90,10 @@ public class GetFeatureRequest extends WFSRequest {
         return maxFeatures;
     }
 
+    public Integer getStartIndex() {
+        return startIndex;
+    }
+    
     public ResultType getResultType() {
         return resultType;
     }
@@ -126,6 +132,14 @@ public class GetFeatureRequest extends WFSRequest {
      */
     public void setMaxFeatures(Integer maxFeatures) {
         this.maxFeatures = maxFeatures;
+    }
+
+    /**
+     * @param startIndex
+     *            the startIndex to set
+     */
+    public void setStartIndex(Integer startIndex) {
+        this.startIndex = startIndex;
     }
 
     /**

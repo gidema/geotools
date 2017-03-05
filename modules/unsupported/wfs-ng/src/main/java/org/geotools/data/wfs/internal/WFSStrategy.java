@@ -227,4 +227,10 @@ public abstract class WFSStrategy extends Specification {
      */
     public abstract Map<QName, Class<?>> getFieldTypeMappings();
 
+    /**
+     * Provide operations meta data
+     * 
+     * @return operations meta data
+     */
+    public abstract WFSOperationsMetadata getOperationsMetadata();
 }

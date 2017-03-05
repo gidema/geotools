@@ -20,6 +20,7 @@ import net.opengis.wfs.WFSCapabilitiesType;
 
 import org.eclipse.emf.ecore.EObject;
 import org.geotools.data.ows.Capabilities;
+import org.geotools.data.wfs.internal.v2_0.WFSOperationsMetadata20;
 import org.geotools.xml.EMFUtils;
 import org.w3c.dom.Document;
 
@@ -28,6 +29,8 @@ public class WFSGetCapabilities extends Capabilities {
     protected final Document rawDocument;
 
     protected final EObject capabilities;
+    
+    private WFSOperationsMetadata operationsMetadata = null;
 
     private WFSGetCapabilities(EObject capabilities, Document rawDocument) {
         this.capabilities = capabilities;
@@ -35,6 +38,7 @@ public class WFSGetCapabilities extends Capabilities {
         try {
             String updateSequence = (String) EMFUtils.get(capabilities, "updateSequence");
             setUpdateSequence(updateSequence);
+            operationsMetadata = parseOperationsMetadata(EMFUtils.get(capabilities, "operationsMetadata"));
         } catch (Exception e) {
             //
         }
@@ -48,6 +52,10 @@ public class WFSGetCapabilities extends Capabilities {
         return capabilities;
     }
 
+    public WFSOperationsMetadata getOperationsMetadata() {
+        return operationsMetadata;
+    }
+    
     public static WFSGetCapabilities create(EObject capabilities, Document rawDocument) {
         if (capabilities instanceof WFSCapabilitiesType) {
 
@@ -65,6 +73,16 @@ public class WFSGetCapabilities extends Capabilities {
             return new WFS_2_0_0((net.opengis.wfs20.WFSCapabilitiesType) capabilities, rawDocument);
         }
         throw new IllegalArgumentException("Unrecognized capabilities object: " + capabilities);
+    }
+
+    private static WFSOperationsMetadata parseOperationsMetadata(Object operationsMetadata) {
+        if (operationsMetadata instanceof net.opengis.ows20.OperationsMetadataType) {
+            return new WFSOperationsMetadata20((net.opengis.ows11.OperationsMetadataType)operationsMetadata);
+        }
+        else if (operationsMetadata instanceof net.opengis.ows11.OperationsMetadataType) {
+            return new WFSOperationsMetadata20((net.opengis.ows11.OperationsMetadataType)operationsMetadata);
+        }
+        throw new UnsupportedOperationException();
     }
 
     private static class WFS_1_0_0 extends WFSGetCapabilities {

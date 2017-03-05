@@ -84,6 +84,7 @@ import org.geotools.data.wfs.internal.Versions;
 import org.geotools.data.wfs.internal.WFSExtensions;
 import org.geotools.data.wfs.internal.WFSGetCapabilities;
 import org.geotools.data.wfs.internal.WFSOperationType;
+import org.geotools.data.wfs.internal.WFSOperationsMetadata;
 import org.geotools.data.wfs.internal.WFSResponseFactory;
 import org.geotools.data.wfs.internal.WFSStrategy;
 import org.geotools.util.Version;
@@ -112,6 +113,8 @@ public class StrictWFS_1_x_Strategy extends AbstractWFSStrategy {
      */
     protected net.opengis.wfs.WFSCapabilitiesType capabilities;
 
+    private WFSOperationsMetadata operationsMetadata;
+    
     private final Map<QName, FeatureTypeType> typeInfos;
 
     private Version serviceVersion;
@@ -436,6 +439,8 @@ public class StrictWFS_1_x_Strategy extends AbstractWFSStrategy {
             QName name = transTypeInfo.getName();
             typeInfos.put(name, transTypeInfo);
         }
+        // TODO implement this.
+        this.operationsMetadata = null;
     }
     
     /**
@@ -488,6 +493,14 @@ public class StrictWFS_1_x_Strategy extends AbstractWFSStrategy {
         return new HashSet<QName>(typeInfos.keySet());
     }
 
+    /**
+     * @see WFSStrategy#getOperationsMetadata()
+     */
+    @Override
+        public WFSOperationsMetadata getOperationsMetadata() {
+            return operationsMetadata;
+        }
+    
     /**
      * @see org.geotools.data.wfs.internal.WFSStrategy#getFeatureTypeInfo(javax.xml.namespace.QName)
      */

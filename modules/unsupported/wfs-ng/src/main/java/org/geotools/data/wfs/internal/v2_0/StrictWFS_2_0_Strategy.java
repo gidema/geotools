@@ -116,6 +116,8 @@ public class StrictWFS_2_0_Strategy extends AbstractWFSStrategy {
 
     private final Map<QName, FeatureTypeType> typeInfos;
 
+    private WFSOperationsMetadata20 operationsMetadata;
+
     private static final ConfigurationMetadataKey CONFIG_KEY = ConfigurationMetadataKey.get(WFSDataStore.STORED_QUERY_CONFIGURATION_HINT);
 
     public StrictWFS_2_0_Strategy() {
@@ -161,6 +163,7 @@ public class StrictWFS_2_0_Strategy extends AbstractWFSStrategy {
             QName name = typeInfo.getName();
             typeInfos.put(name, typeInfo);
         }
+        this.operationsMetadata = new WFSOperationsMetadata20(this.capabilities.getOperationsMetadata());
     }
 
     @Override
@@ -212,6 +215,11 @@ public class StrictWFS_2_0_Strategy extends AbstractWFSStrategy {
     }
 
     @Override
+    public WFSOperationsMetadata20 getOperationsMetadata() {
+        return operationsMetadata;
+    }
+
+    @Override
     protected Map<String, String> buildGetFeatureParametersForGET(
             GetFeatureRequest query) {
         Map<String, String> kvp = null;
@@ -255,6 +263,10 @@ public class StrictWFS_2_0_Strategy extends AbstractWFSStrategy {
                 String count = kvp.remove("MAXFEATURES");
                 kvp.put("COUNT", count);
             }
+            if (query.getStartIndex() != null) {
+                kvp.put("STARTINDEX", query.getStartIndex().toString());
+            }
+            
         }
 
         return kvp;
@@ -304,6 +316,11 @@ public class StrictWFS_2_0_Strategy extends AbstractWFSStrategy {
             getFeature.setCount(BigInteger.valueOf(maxFeatures.intValue()));
         }
 
+        Integer startIndex = query.getStartIndex();
+        if (startIndex != null) {
+            getFeature.setStartIndex(BigInteger.valueOf(startIndex.intValue()));
+        }
+        
         ResultType resultType = query.getResultType();
         getFeature.setResultType(ResultType.RESULTS == resultType ? ResultTypeType.RESULTS
                 : ResultTypeType.HITS);
