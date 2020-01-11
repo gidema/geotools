@@ -89,7 +89,7 @@ class WFSFeatureSource extends ContentFeatureSource {
 
     @Override
     protected boolean canOffset() {
-        return false; // TODO: check with the WFS client
+        return getWfs().canOffset();
     }
 
     /**
@@ -228,6 +228,12 @@ class WFSFeatureSource extends ContentFeatureSource {
         if (Integer.MAX_VALUE > maxFeatures && canLimit()) {
             request.setMaxFeatures(maxFeatures);
         }
+
+        Integer startIndex = query.getStartIndex();
+        if (startIndex != null) {
+            request.setStartIndex(startIndex);
+        }
+
         // let the request decide request.setOutputFormat(outputFormat);
         request.setPropertyNames(query.getPropertyNames());
         request.setSortBy(query.getSortBy());

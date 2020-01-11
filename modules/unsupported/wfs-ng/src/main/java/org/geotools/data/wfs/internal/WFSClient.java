@@ -312,6 +312,10 @@ public class WFSClient extends AbstractOpenWebService<WFSGetCapabilities, QName>
         return getStrategy().supports(ResultType.HITS);
     }
 
+    public boolean canOffset() {
+        return this.getStrategy().canOffset();
+    }
+
     public GetFeatureRequest createGetFeatureRequest() {
         WFSStrategy strategy = getStrategy();
         return new GetFeatureRequest(config, strategy);

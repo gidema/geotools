@@ -162,6 +162,11 @@ public class StrictWFS_1_x_Strategy extends AbstractWFSStrategy {
             getFeature.setMaxFeatures(BigInteger.valueOf(maxFeatures.intValue()));
         }
 
+        Integer startIndex = query.getStartIndex();
+        if (query.getStartIndex() != null) {
+            getFeature.setStartIndex(BigInteger.valueOf(startIndex.intValue()));
+        }
+
         ResultType resultType = query.getResultType();
         getFeature.setResultType(
                 RESULTS == resultType
