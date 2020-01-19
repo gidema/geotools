@@ -25,9 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
-
 import javax.xml.namespace.QName;
-
 import org.geotools.data.ows.Specification;
 import org.geotools.data.wfs.WFSServiceInfo;
 import org.geotools.data.wfs.internal.GetFeatureRequest.ResultType;
@@ -191,12 +189,12 @@ public abstract class WFSStrategy extends Specification {
     public String newRequestHandle(WFSOperationType operation) {
         StringBuilder handle =
                 new StringBuilder("GeoTools ")
-                .append(GeoTools.getVersion())
-                .append("(")
-                .append(GeoTools.getBuildRevision())
-                .append(") WFS ")
-                .append(getVersion())
-                .append(" DataStore @");
+                        .append(GeoTools.getVersion())
+                        .append("(")
+                        .append(GeoTools.getBuildRevision())
+                        .append(") WFS ")
+                        .append(getVersion())
+                        .append(" DataStore @");
         try {
             handle.append(InetAddress.getLocalHost().getHostName());
         } catch (Exception ignore) {

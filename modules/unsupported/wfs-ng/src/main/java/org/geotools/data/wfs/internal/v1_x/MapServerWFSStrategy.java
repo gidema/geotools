@@ -23,7 +23,6 @@ import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
-
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -34,7 +33,7 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-
+import net.opengis.wfs.FeatureTypeType;
 import org.apache.commons.io.IOUtils;
 import org.geotools.data.wfs.internal.WFSOperationType;
 import org.geotools.data.wfs.internal.WFSRequest;
@@ -46,8 +45,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-
-import net.opengis.wfs.FeatureTypeType;
 
 /**
  * This strategy addresses a bug in most MapServer implementations where a filter is required in
@@ -129,16 +126,16 @@ public class MapServerWFSStrategy extends StrictWFS_1_x_Strategy {
                                 if (coord1 != null && coord2 != null) {
                                     Element coordX1 =
                                             (Element)
-                                            (coord1.getElementsByTagName("gml:X").item(0));
+                                                    (coord1.getElementsByTagName("gml:X").item(0));
                                     Element coordY1 =
                                             (Element)
-                                            (coord1.getElementsByTagName("gml:Y").item(0));
+                                                    (coord1.getElementsByTagName("gml:Y").item(0));
                                     Element coordX2 =
                                             (Element)
-                                            (coord2.getElementsByTagName("gml:X").item(0));
+                                                    (coord2.getElementsByTagName("gml:X").item(0));
                                     Element coordY2 =
                                             (Element)
-                                            (coord2.getElementsByTagName("gml:Y").item(0));
+                                                    (coord2.getElementsByTagName("gml:Y").item(0));
                                     if (coordX1 != null
                                             && coordY1 != null
                                             && coordX2 != null
@@ -217,9 +214,7 @@ public class MapServerWFSStrategy extends StrictWFS_1_x_Strategy {
         }
     }
 
-    /**
-     * MapServer supports the startIndex parameter for each WFS version
-     */
+    /** MapServer supports the startIndex parameter for each WFS version */
     @Override
     public boolean canOffset() {
         return true;

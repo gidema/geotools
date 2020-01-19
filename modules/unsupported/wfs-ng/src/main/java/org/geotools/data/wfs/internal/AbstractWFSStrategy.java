@@ -180,6 +180,7 @@ public abstract class AbstractWFSStrategy extends WFSStrategy {
      *
      * @see #getPostContents(WFSRequest)
      */
+    @Override
     public abstract Configuration getWfsConfiguration();
 
     /*
@@ -236,6 +237,10 @@ public abstract class AbstractWFSStrategy extends WFSStrategy {
 
         if (request.getMaxFeatures() != null) {
             map.put("MAXFEATURES", String.valueOf(request.getMaxFeatures()));
+        }
+
+        if (request.getStartIndex() != null) {
+            map.put("STARTINDEX", String.valueOf(request.getStartIndex()));
         }
 
         QName typeName = request.getTypeName();

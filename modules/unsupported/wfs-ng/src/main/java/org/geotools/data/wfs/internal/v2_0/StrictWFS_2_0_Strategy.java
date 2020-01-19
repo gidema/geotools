@@ -39,9 +39,34 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
-
 import javax.xml.namespace.QName;
-
+import net.opengis.fes20.AbstractQueryExpressionType;
+import net.opengis.ows11.DCPType;
+import net.opengis.ows11.DomainType;
+import net.opengis.ows11.OperationType;
+import net.opengis.ows11.OperationsMetadataType;
+import net.opengis.ows11.RequestMethodType;
+import net.opengis.ows11.ValueType;
+import net.opengis.wfs20.AbstractTransactionActionType;
+import net.opengis.wfs20.DeleteType;
+import net.opengis.wfs20.DescribeFeatureTypeType;
+import net.opengis.wfs20.DescribeStoredQueriesType;
+import net.opengis.wfs20.FeatureTypeListType;
+import net.opengis.wfs20.FeatureTypeType;
+import net.opengis.wfs20.GetFeatureType;
+import net.opengis.wfs20.InsertType;
+import net.opengis.wfs20.ListStoredQueriesType;
+import net.opengis.wfs20.ParameterType;
+import net.opengis.wfs20.PropertyType;
+import net.opengis.wfs20.QueryType;
+import net.opengis.wfs20.ResultTypeType;
+import net.opengis.wfs20.StoredQueryDescriptionType;
+import net.opengis.wfs20.StoredQueryType;
+import net.opengis.wfs20.TransactionType;
+import net.opengis.wfs20.UpdateType;
+import net.opengis.wfs20.ValueReferenceType;
+import net.opengis.wfs20.WFSCapabilitiesType;
+import net.opengis.wfs20.Wfs20Factory;
 import org.eclipse.emf.ecore.EObject;
 import org.geotools.data.wfs.WFSDataStore;
 import org.geotools.data.wfs.WFSServiceInfo;
@@ -74,34 +99,6 @@ import org.geotools.xsd.Configuration;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.filter.Filter;
 import org.opengis.filter.capability.FilterCapabilities;
-
-import net.opengis.fes20.AbstractQueryExpressionType;
-import net.opengis.ows11.DCPType;
-import net.opengis.ows11.DomainType;
-import net.opengis.ows11.OperationType;
-import net.opengis.ows11.OperationsMetadataType;
-import net.opengis.ows11.RequestMethodType;
-import net.opengis.ows11.ValueType;
-import net.opengis.wfs20.AbstractTransactionActionType;
-import net.opengis.wfs20.DeleteType;
-import net.opengis.wfs20.DescribeFeatureTypeType;
-import net.opengis.wfs20.DescribeStoredQueriesType;
-import net.opengis.wfs20.FeatureTypeListType;
-import net.opengis.wfs20.FeatureTypeType;
-import net.opengis.wfs20.GetFeatureType;
-import net.opengis.wfs20.InsertType;
-import net.opengis.wfs20.ListStoredQueriesType;
-import net.opengis.wfs20.ParameterType;
-import net.opengis.wfs20.PropertyType;
-import net.opengis.wfs20.QueryType;
-import net.opengis.wfs20.ResultTypeType;
-import net.opengis.wfs20.StoredQueryDescriptionType;
-import net.opengis.wfs20.StoredQueryType;
-import net.opengis.wfs20.TransactionType;
-import net.opengis.wfs20.UpdateType;
-import net.opengis.wfs20.ValueReferenceType;
-import net.opengis.wfs20.WFSCapabilitiesType;
-import net.opengis.wfs20.Wfs20Factory;
 
 /** */
 public class StrictWFS_2_0_Strategy extends AbstractWFSStrategy {
@@ -180,11 +177,11 @@ public class StrictWFS_2_0_Strategy extends AbstractWFSStrategy {
     @Override
     public boolean supports(ResultType resultType) {
         switch (resultType) {
-        case RESULTS:
-            return true;
-        case HITS:
-        default:
-            return false;
+            case RESULTS:
+                return true;
+            case HITS:
+            default:
+                return false;
         }
     }
 
@@ -271,7 +268,7 @@ public class StrictWFS_2_0_Strategy extends AbstractWFSStrategy {
 
             List<ParameterType> params =
                     new ParameterTypeFactory(config, desc, featureTypeInfo)
-                    .buildStoredQueryParameters(viewParams, originalFilter);
+                            .buildStoredQueryParameters(viewParams, originalFilter);
 
             for (ParameterType p : params) {
                 kvp.put(p.getName(), p.getValue());
@@ -366,7 +363,7 @@ public class StrictWFS_2_0_Strategy extends AbstractWFSStrategy {
 
             List<ParameterType> params =
                     new ParameterTypeFactory(config, desc, featureTypeInfo)
-                    .buildStoredQueryParameters(viewParams, query.getFilter());
+                            .buildStoredQueryParameters(viewParams, query.getFilter());
 
             storedQuery.getParameter().addAll(params);
 
@@ -415,14 +412,14 @@ public class StrictWFS_2_0_Strategy extends AbstractWFSStrategy {
             }
 
             /*
-             * System.err.println("SortBy is not yet implemented in StrictWFS_2_0_Strategy");
-               SortBy[] sortByList = query.getSortBy();
-               if (sortByList != null) {
-                   for (SortBy sortBy : sortByList) {
-                       wfsQuery.getSortBy().add(sortBy);
-                   }
-               }
-             */
+            * System.err.println("SortBy is not yet implemented in StrictWFS_2_0_Strategy");
+              SortBy[] sortByList = query.getSortBy();
+              if (sortByList != null) {
+                  for (SortBy sortBy : sortByList) {
+                      wfsQuery.getSortBy().add(sortBy);
+                  }
+              }
+            */
             abstractQuery = wfsQuery;
         }
         getFeature.getAbstractQueryExpression().add(abstractQuery);
@@ -535,20 +532,20 @@ public class StrictWFS_2_0_Strategy extends AbstractWFSStrategy {
         String parameterName;
 
         switch (operation) {
-        case GET_FEATURE:
-        case DESCRIBE_FEATURETYPE:
-        case GET_FEATURE_WITH_LOCK:
-            parameterName = "outputFormat";
-            break;
-        case TRANSACTION:
-            parameterName = "inputFormat";
-            break;
-        case LIST_STORED_QUERIES:
-        case DESCRIBE_STORED_QUERIES:
-            // These return XML as specified in WFS 2.0.0
-            return Collections.singleton("text/xml");
-        default:
-            throw new UnsupportedOperationException("not yet implemented for " + operation);
+            case GET_FEATURE:
+            case DESCRIBE_FEATURETYPE:
+            case GET_FEATURE_WITH_LOCK:
+                parameterName = "outputFormat";
+                break;
+            case TRANSACTION:
+                parameterName = "inputFormat";
+                break;
+            case LIST_STORED_QUERIES:
+            case DESCRIBE_STORED_QUERIES:
+                // These return XML as specified in WFS 2.0.0
+                return Collections.singleton("text/xml");
+            default:
+                throw new UnsupportedOperationException("not yet implemented for " + operation);
         }
 
         final OperationType operationMetadata = getOperationMetadata(operation);
